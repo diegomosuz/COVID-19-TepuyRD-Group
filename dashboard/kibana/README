@@ -1,0 +1,5 @@
+1. Execute docker_install.sh
+2. Execute pull_kibana.sh
+3. To start kibana use start_kibana.sh
+4. To stop kibana use stop_kibana.sh
+5. Open browser and enter https://localhost:5601
