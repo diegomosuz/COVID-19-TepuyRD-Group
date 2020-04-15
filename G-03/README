@@ -1,0 +1,7 @@
+El directorio scripts contiene el codigo en python para generar los modelos. Para esta acción es necesario instalar mathplotlib, pandas y scipy
+
+En linux se podría hacer ejecutando las siguientes sentencias
+sudo apt-get install python3-pip
+python3 -m pip install mathplotlib
+python3 -m pip install pandas
+python3 -m pip install scipy
