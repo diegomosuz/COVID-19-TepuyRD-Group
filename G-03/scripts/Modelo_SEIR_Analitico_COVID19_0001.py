@@ -10,6 +10,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import argparse
+import sys
  
 def rk4(f, g, h, i, w0, x0, y0, z0, t0, tf, alfa, beta, gamma, n, hh):
     vt = [0] * (n + 1)
@@ -63,41 +66,83 @@ def h(w, x, y, z, alfa, beta, gamma):
 def i(w, x, y, z, alfa, beta, gamma):
     return (gamma*y)
 
+
+
 #Inicio
-t0 = 0
-tf = 10
-hh = 0.01
+
+parser = argparse.ArgumentParser(description='Modelo analítico COVID19 basado en SEIR (Susceptibles, Expuestos, Infectados, Removidos)')
+
+#Datos de la simulacion
+parser.add_argument('-t0','--tiempo-inicial-sim', help="Tiempo inicial de simulación en días. Si no es especificado se asume 0", required=False, type=int, default=0)
+parser.add_argument('-tf','--tiempo-final-sim', help="Tiempo final de simulación en días. Si no es especificado se asume 15 días", required=False, type=int, default=15)
+parser.add_argument('-hh','--delta', help="Paso o delta de tiempo (dt). Este parametro es suceptible al método de resolucion. Si no es especificado se asume 0.01 días", required=False, type=float, default=0.01)
+#Condiciones iniciales
+#parser.add_argument('-r0','---infeccion-inicial', help="Fraccion de Infeccion Inicial. Si no es especificado se asume 0.0000045", required=False, type=float, default=0.0000045)
+parser.add_argument('-x0','--expuestos-inicial', help="Fraccion de Expuestos Inicial. Si no es especificado se asume 0.1", required=False, type=float, default=0.1)
+parser.add_argument('-w0','--susceptible-inicial', help="Fraccion Suceptible Inicial. Si no es especificado se asume 1 - x0", required=False, type=float, default=-1)
+parser.add_argument('-y0','--infeccion-inicial', help="Fracción de Infeccion Inicial. Si no es especificado se asume 0", required=False, type=float, default=0)
+parser.add_argument('-z0','--removidos-inicial', help="Fraccion de Removidos Inicial. Si no es especificado se asume 0", required=False, type=float, default=0)
+#Parametros del modelo
+parser.add_argument('-bmx','--betamx', help="Límite máximo del parámetro beta (tasa de transmisión). Si no es especificado se asume 10", required=False, type=float, default=10)
+parser.add_argument('-bmn','--betamn', help="Límite mínimo del parámetro beta (tasa de transmisión). Si no es especificado se asume 9", required=False, type=float, default=9)
+parser.add_argument('-gm','--gamma', help="Tasa de recuperación. Si no es especificado se asume 1", required=False, type=float, default=1)
+parser.add_argument('-af','--alfa', help="Tasa de exposición. Si no es especificado se asume 2", required=False, type=float, default=2)
+
+#Other parameters
+parser.add_argument('-s','--salida', help="Nombre del archivo de salida. Si no es especificado se asume 'SIR_COVID-19_001.csv'", required=False, default="SEIR_COVID-19_0001.csv")
+parser.add_argument('-gf','--graficar', help="Graficar los datos de la simulación. Si no es especificado no se grafica", required=False, action='store_true')
+
+parsed_args = vars(parser.parse_args())
+
+# Arguments minus script name
+args = sys.argv[1:]
+
+t0 = parsed_args['tiempo_inicial_sim']
+tf = parsed_args['tiempo_final_sim']
+hh = parsed_args['delta']
 n = int((tf - t0) / hh)
 
-r0 = 0.0000045
-x0 = 0.1
-w0 = 1 - x0
+#r0 = 0.0000045 #r0 no es usado en este algoritmo
+x0 = parsed_args['expuestos_inicial']
+if parsed_args['susceptible_inicial'] < 0:
+    w0 = 1 - x0             
+else:
+    w0 = parsed_args['susceptible_inicial']
+
 #x0 = 10*r0
-y0 = 0
-z0 = 0
+y0 = parsed_args['infeccion_inicial']
+z0 = parsed_args['removidos_inicial']
 #n = 100
 #hh = 0.1
-betamx = 10
-betamn = 9
+betamx = parsed_args['betamx']
+betamn = parsed_args['betamn']
 
 beta = np.linspace(betamn,betamx,n+1)
-gamma = 1
-alfa = 2
+gamma = parsed_args['gamma'] 
+alfa = parsed_args['alfa'] 
+
+#Other parameters
+output = parsed_args['salida'] 
 
 vt, vw, vx, vy, vz = rk4(f, g, h, i, w0, x0, y0, z0, t0, tf, alfa, beta, gamma, n, hh)
-for t, w, x, y, z in list(zip(vt, vw, vx, vy, vz))[::10]:
-    print("%5.1f %0.5f %0.5f %0.5f %0.5f" % (t, w, x, y, z))
+#for t, w, x, y, z in list(zip(vt, vw, vx, vy, vz))[::10]:
+#    print("%5.1f %0.5f %0.5f %0.5f %0.5f" % (t, w, x, y, z))
 
-plt.plot(vt,vw,'-',linewidth=1,color='b', label = "Susceptibles")
-plt.plot(vt,vx,'-',linewidth=1,color='k', label = "Expuestos")
-plt.plot(vt,vy,'--',linewidth=1,color='r', label = "Infectados")
-plt.plot(vt,vz,'-',linewidth=1,color='g', label = "Removidos")
-#plt.plot(vt,(beta-betamn)/(betamx-betamn),'-',linewidth=1,color='y', label = "Tasa")
-plt.grid()
-plt.xlim(t0,tf)
-plt.ylim(0,1)
-plt.xlabel('tiempo')
-plt.ylabel('Fracción Casos')
-plt.title('Modelo SEIR')
-plt.legend()
-plt.show()
+d = {'Tiempo': vt, 'Susceptibles': vw, 'Expuestos': vx, 'Infectados': vy, 'Removidos': vz}
+df = pd.DataFrame(data=d)
+df.to_csv(output, index=False)
+
+if parsed_args['graficar']:
+    plt.plot(vt,vw,'-',linewidth=1,color='b', label = "Susceptibles")
+    plt.plot(vt,vx,'-',linewidth=1,color='k', label = "Expuestos")
+    plt.plot(vt,vy,'--',linewidth=1,color='r', label = "Infectados")
+    plt.plot(vt,vz,'-',linewidth=1,color='g', label = "Removidos")
+    #plt.plot(vt,(beta-betamn)/(betamx-betamn),'-',linewidth=1,color='y', label = "Tasa")
+    plt.grid()
+    plt.xlim(t0,tf)
+    plt.ylim(0,1)
+    plt.xlabel('tiempo')
+    plt.ylabel('Fracción Casos')
+    plt.title('Modelo SEIR')
+    plt.legend()
+    plt.show()
