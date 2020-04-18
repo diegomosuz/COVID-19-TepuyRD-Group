@@ -13,9 +13,41 @@ import sys
 import json
 import ssl
 import urllib.request
+import argparse
 
 import os
 import wget
+
+#inicio
+parser = argparse.ArgumentParser(description='Modelo analítico COVID19 basado en SIR (Susceptibles, Infectados, Removidos)')
+
+#Datos de la simulacion
+parser.add_argument('-lp','--lista-paises', help="Lista de paises ex. Ecuador,Venezuela,Colombia.", required=True)
+parser.add_argument('-fi','--fecha-inicio', help="Fecha de inicio de la simulación en formato mm/dd/yyyy. Si no es específicado se asume 1/22/2020", required=False, default="1/22/20")
+parser.add_argument('-rp','--rango-predicho', help="Rango predicho en días. Si no es especificado se asume 150 días", required=False, type=int, default=150)
+#Condiciones iniciales
+parser.add_argument('-i0','---infeccion-inicial', help="Fraccion de Infeccion Inicial. Si no es especificado se asume 2", required=False, type=int, default=2)
+parser.add_argument('-s0','--susceptible-inicial', help="Fraccion Suceptible Inicial. Si no es especificado se asume 4000000", required=False, type=int, default=4000000)
+parser.add_argument('-r0','--removidos-inicial', help="Fraccion Removidos Inicial. Si no es especificado se asume 10", required=False, type=int, default=10)
+#Other parameters
+parser.add_argument('-s','--salida', help="Prefijo del nombre del archivo de salida. Si no es especificado se asume 'SIR_COVID-19_001'", required=False, default="SIR_COVID-19_0002")
+#parser.add_argument('-gf','--graficar', help="Graficar los datos de la simulación. Si no es especificado no se grafica", required=False, action='store_true')
+parser.add_argument('-nd','--no-descargar', help="Omitir la descarga de datos desde el repositorio.", required=False, action='store_false')
+
+parsed_args = vars(parser.parse_args())
+
+# Arguments minus script name
+args = sys.argv[1:]
+
+countries=parsed_args['lista_paises'].split(",")
+download=parsed_args['no_descargar']
+output=parsed_args['salida']
+#graficar=parsed_args['graficar']
+startdate=parsed_args['fecha_inicio']
+predict_range=parsed_args['rango_predicho']
+s_0=parsed_args['susceptible_inicial']
+i_0 = parsed_args['infeccion_inicial']
+r_0 = parsed_args['removidos_inicial']
 
 #! mkdir data 
 #%cd data
@@ -25,12 +57,13 @@ import wget
 print("\nSe descargarán los archivos con los datos\n")
 directory = "data"
 # Parent Directory path 
-parent_dir = "/home/eaceros/workspace/python/COVID19/"
+parent_dir = "."
 # Path 
 path = os.path.join(parent_dir, directory) 
 #os.mkdir(path) 
 #print("Directory '%s' created" %directory) 
 os.chdir(directory)
+ssl._create_default_https_context = ssl._create_unverified_context
 url = 'https://raw.githubusercontent.com/Lewuathe/COVID19-SIR/master/data_url.json'
 filename = wget.download(url)
 print("\nLos datos fueron descargados\n")
@@ -110,6 +143,10 @@ class Learner(object):
         print(f"country={self.country}, beta={beta:.8f}, gamma={gamma:.8f}, r_0:{(beta/gamma):.8f}")
         fig.savefig(f"{self.country}.png")
 
+        #save the data to a file
+        fileout="{}-{}.csv".format(output, self.country) 
+        df.to_csv(fileout, index=True)
+
 def remove_province(input_file, output_file):
     input = open(input_file, "r")
     output = open(output_file, "w")
@@ -152,14 +189,6 @@ def loss(point, data, recovered, s_0, i_0, r_0):
     return alpha * l1 + (1 - alpha) * l2
 
 def main():
-
-    countries=["Ecuador"]#, "US", "Venezuela"]
-    download=True
-    startdate="1/22/20"
-    predict_range=150
-    s_0=4000000
-    i_0 = 2
-    r_0 = 10
 
     if download:
         data_d = load_json("data_url.json")
