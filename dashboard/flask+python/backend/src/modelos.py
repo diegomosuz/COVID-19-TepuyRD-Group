@@ -2,10 +2,12 @@
 
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 import mod_sir_covid_19_v1
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     @app.route('/sir01', methods=['GET', 'POST'])
     def sir01():

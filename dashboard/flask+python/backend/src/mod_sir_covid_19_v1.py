@@ -53,6 +53,7 @@ def rk4(f, g, h, x0, y0, z0, t0, tf, betamn, betamx, gamma, n, hh):
         i = i + 1
 
 
-    d = {'Tiempo': vt, 'Susceptibles': vx, 'Infectados': vy, 'Removidos': vz}
-    df = pd.DataFrame(data=d)
-    return df.to_json(orient='index')
+    d = {'tiempo': vt, 'susceptibles': vx, 'infectados': vy, 'removidos': vz}
+    #df = pd.DataFrame(data=d)
+    df = pd.DataFrame([vt, vx, vy, vz], index =['tiempo', 'susceptibles', 'infectados', 'removidos'])
+    return '{ "data": ' + df.to_json(orient='split') + '}'
