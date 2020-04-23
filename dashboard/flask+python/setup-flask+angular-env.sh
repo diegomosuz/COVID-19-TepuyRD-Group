@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./angular-installer.sh
+
 # depending on the environment, you will have to use
 # pip3 instead of pip (just once)
 python3 -m pip install pipenv

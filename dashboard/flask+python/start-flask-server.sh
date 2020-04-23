@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # initialize the virtual environment
-pipenv --three
-
+pipenv --three && pipenv sync
 #run the server
 export FLASK_APP=./backend/src/modelos.py
 export FLASK_ENV=development
