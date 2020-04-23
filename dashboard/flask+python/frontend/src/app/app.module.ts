@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ToastModule } from "primeng/toast";
+import { SpinnerModule } from 'primeng/spinner';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { ToastModule } from "primeng/toast";
     HttpClientModule,
     TableModule,
     ChartModule,
-    ToastModule
+    ToastModule,
+    SpinnerModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
