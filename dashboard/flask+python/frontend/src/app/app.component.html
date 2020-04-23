@@ -10,25 +10,52 @@
   </h1>
 </div>
 <div>
-  Tiempo Inicial: <p-spinner  size="10" [(ngModel)]="tstart" [min]="0"></p-spinner>
-  Días a simular: <p-spinner  size="10" [(ngModel)]="simdays" [min]="0" [max]="730"></p-spinner>
-  Paso en días: <p-spinner  size="10" [(ngModel)]="hh" [min]="0.001" [max]="5" [step]="0.001"></p-spinner>
-  Contagiados inicial (%): <p-spinner  size="10" [(ngModel)]="r0" [min]="0.0000000001" [max]="1" [step]="0.0000005"></p-spinner>
-  Susceptibles (%): <p-spinner  size="10" [(ngModel)]="x0" [min]="-1" [max]="1" [step]="0.0000005"></p-spinner>
-  Removidos (%): <p-spinner  size="10" [(ngModel)]="z0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
-  Vel. de Contagio Max: <p-spinner  size="10" [(ngModel)]="betamx" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
-  Vel. de Contagio Min: <p-spinner  size="10" [(ngModel)]="betamn" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
-  Vel. de Recuperación: <p-spinner  size="10" [(ngModel)]="gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Tiempo Inicial: <p-spinner  size="10" [(ngModel)]="sir01Data.tstart" [min]="0"></p-spinner>
+  Días a simular: <p-spinner  size="10" [(ngModel)]="sir01Data.simdays" [min]="0" [max]="730"></p-spinner>
+  Paso en días: <p-spinner  size="10" [(ngModel)]="sir01Data.hh" [min]="0.001" [max]="5" [step]="0.001"></p-spinner>
+  Contagiados inicial (%): <p-spinner  size="10" [(ngModel)]="sir01Data.r0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  Susceptibles (%): <p-spinner  size="10" [(ngModel)]="sir01Data.x0" [min]="-1" [max]="1" [step]="0.0000005"></p-spinner>
+  Removidos (%): <p-spinner  size="10" [(ngModel)]="sir01Data.z0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  Vel. de Contagio Max: <p-spinner  size="10" [(ngModel)]="sir01Data.betamx" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Vel. de Contagio Min: <p-spinner  size="10" [(ngModel)]="sir01Data.betamn" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Vel. de Recuperación: <p-spinner  size="10" [(ngModel)]="sir01Data.gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
 
   <div>
-    <button (click)="sir001()">Actualizar</button>
+    <button (click)="sir001()">Actualizar SIR-01</button>
   </div>
   <div class="container">
-    <p-chart type="line" [data]="modSIR01Data" responsive="true" width="40vw" height="80vh"></p-chart>
-    <p-chart type="line" [data]="modSIR01DataInf" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="sir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="sir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
   </div>
 </div>
 
 <div>
-  <button (click)="sir002()">All Employees</button>
+  <h1>
+    3. Modelos analítico SEIR basado en Infectados, Expuestos, Susceptibles y Removidos
+  </h1>
+</div>
+<div>
+  Tiempo Inicial: <p-spinner  size="10" [(ngModel)]="seir01Data.tstart" [min]="0"></p-spinner>
+  Días a simular: <p-spinner  size="10" [(ngModel)]="seir01Data.simdays" [min]="0" [max]="730"></p-spinner>
+  Paso en días: <p-spinner  size="10" [(ngModel)]="seir01Data.hh" [min]="0.001" [max]="5" [step]="0.001"></p-spinner>
+  Contagiados inicial (%): <p-spinner  size="10" [(ngModel)]="seir01Data.r0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  Susceptibles (%): <p-spinner  size="10" [(ngModel)]="seir01Data.w0" [min]="-1" [max]="1" [step]="0.0000005"></p-spinner>
+  Expuestos (%): <p-spinner  size="10" [(ngModel)]="seir01Data.x0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  Removidos (%): <p-spinner  size="10" [(ngModel)]="seir01Data.z0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  Vel. de Contagio Max: <p-spinner  size="10" [(ngModel)]="seir01Data.betamx" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Vel. de Contagio Min: <p-spinner  size="10" [(ngModel)]="seir01Data.betamn" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Vel. de Recuperación: <p-spinner  size="10" [(ngModel)]="seir01Data.gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  Tasa de Exposicion: <p-spinner  size="10" [(ngModel)]="seir01Data.alfa" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+
+  <div>
+    <button (click)="seir001()">Actualizar SEIR</button>
+  </div>
+  <div class="container">
+    <p-chart type="line" [data]="seir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="seir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
+  </div>
+</div>
+
+<div>
+  <button (click)="seir001()">All Employees</button>
 </div>
