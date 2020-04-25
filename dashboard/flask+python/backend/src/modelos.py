@@ -33,7 +33,19 @@ def create_app():
 
     @app.route('/sir02')
     def sir02():
-        return 'Hello, SIR Analitico 2!'
+        country = request.args.get('country', default = "Colombia", type = str)
+        fi = request.args.get('fi', default="1/22/20", type = str)
+        rp = request.args.get('rp', default = 30, type = int)
+        i0 = request.args.get('i0', default = 2, type = int)
+        s0 = request.args.get('s0', default = 200000, type = int)
+        r0 = request.args.get('r0', default = 10, type = int)
+
+        data_d = sirv1.download_dataset()
+        sirv1.download_data(data_d)
+        sirv1.remove_all_series_province(data_d)
+
+        learner = sirv1.Learner(country, sirv1.loss, fi, rp, s0, i0, r0)
+        return learner.train()
 
     @app.route('/seir01')
     def seir01():

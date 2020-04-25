@@ -11,6 +11,8 @@ numpy = "*"
 pandas = "*"
 flask = "*"
 flask-cors = "*"
+wget = "*"
+scipy = "*"
 
 [requires]
 python_version = "3.6"

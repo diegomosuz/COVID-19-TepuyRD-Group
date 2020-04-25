@@ -18,3 +18,5 @@ pipenv install Flask
 pipenv install flask-cors
 pipenv install numpy
 pipenv install pandas
+pipenv install wget 
+pipenv install scipy
