@@ -21,12 +21,13 @@
   Vel. de Recuperación: <p-spinner  size="10" [(ngModel)]="sir01Data.gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
 
   <div>
-    <button (click)="sir001()">Actualizar SIR-01</button>
+    <p-button (click)="sir001()"  [disabled]="blockedPnlSIR01" label="Actualizar SIR-01"></p-button>
   </div>
-  <div class="container">
+</div>
+
+<div class="container">
     <p-chart type="line" [data]="sir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
     <p-chart type="line" [data]="sir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
-  </div>
 </div>
 
 <div>
@@ -48,10 +49,11 @@
   Tasa de Exposicion: <p-spinner  size="10" [(ngModel)]="seir01Data.alfa" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
 
   <div>
-    <button (click)="seir001()">Actualizar SEIR</button>
+    <p-button (click)="seir001()"  [disabled]="blockedPnlSEIR" label="Actualizar SEIR"></p-button>
   </div>
-  <div class="container">
-    <p-chart type="line" [data]="seir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
-    <p-chart type="line" [data]="seir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
-  </div>
+</div>
+
+<div class="container">
+  <p-chart type="line" [data]="seir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+  <p-chart type="line" [data]="seir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
 </div>

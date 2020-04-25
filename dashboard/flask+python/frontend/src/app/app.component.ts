@@ -58,6 +58,8 @@ export class AppComponent {
   title = 'frontend';
   sir01Data: SIR01Data;
   seir01Data: SEIR01Data;
+  blockedPnlSIR01: boolean = false;
+  blockedPnlSEIR: boolean = false;
   
 
   constructor(private httpClient: HttpClient) {
@@ -72,6 +74,7 @@ export class AppComponent {
 
   sir001() {
     let tf=this.sir01Data.tstart+this.sir01Data.simdays;
+    this.blockedPnlSIR01 = true;
     this.httpClient.get<any>(`http://127.0.0.1:5000/sir01?t0=${this.sir01Data.tstart}&tf=${tf}&r0=${this.sir01Data.r0}&x0=${this.sir01Data.x0}&z0=${this.sir01Data.z0}&betamn=${this.sir01Data.betamn}&betamx=${this.sir01Data.betamx}&gamma=${this.sir01Data.gamma}&hh=${this.sir01Data.hh}`)
       .subscribe((data: JSON) => {
          this.sir01Data.modData = {
@@ -103,6 +106,7 @@ export class AppComponent {
                 }
             ]
         }
+        this.blockedPnlSIR01 = false;
       });
   }
 
@@ -111,6 +115,7 @@ export class AppComponent {
 
   seir001() {
     let tf=this.seir01Data.tstart+this.seir01Data.simdays;
+    this.blockedPnlSEIR = true;
     this.httpClient.get<any>(`http://127.0.0.1:5000/seir01?t0=${this.seir01Data.tstart}&tf=${tf}&r0=${this.seir01Data.r0}&x0=${this.seir01Data.x0}&w0=${this.seir01Data.w0}&z0=${this.seir01Data.z0}&betamn=${this.seir01Data.betamn}&betamx=${this.seir01Data.betamx}&gamma=${this.seir01Data.gamma}&alfa=${this.seir01Data.alfa}&hh=${this.seir01Data.hh}`)
       .subscribe((data: JSON) => {
          this.seir01Data.modData = {
@@ -148,6 +153,7 @@ export class AppComponent {
                 }
             ]
         }
+        this.blockedPnlSEIR = false;
       });
   }
 }
