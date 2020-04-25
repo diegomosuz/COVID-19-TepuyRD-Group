@@ -179,7 +179,7 @@ class Learner(object):
         optimal = minimize(loss, [0.001, 0.001], args=(data, recovered, self.s_0, self.i_0, self.r_0), method='L-BFGS-B', bounds=[(0.00000001, 0.4), (0.00000001, 0.4)])
         beta, gamma = optimal.x
         new_index, extended_actual, extended_recovered, extended_death, prediction = self.predict(beta, gamma, data, recovered, death, self.country, self.s_0, self.i_0, self.r_0)
-        df = pd.DataFrame([extended_actual, extended_recovered, extended_death, prediction.y[0],  prediction.y[1], prediction.y[2]], index =['Infected data', 'Recovered data', 'Death data', 'Susceptible', 'Infected', 'Recovered'])
+        df = pd.DataFrame([new_index, extended_actual, extended_recovered, extended_death, prediction.y[0],  prediction.y[1], prediction.y[2]], index =['fecha', 'Infected data', 'Recovered data', 'Death data', 'Susceptible', 'Infected', 'Recovered'])
        
         return '{ "data": ' + df.to_json(orient='split') + '}'
 
