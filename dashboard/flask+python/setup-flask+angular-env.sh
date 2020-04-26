@@ -4,7 +4,9 @@
 
 # depending on the environment, you will have to use
 # pip3 instead of pip (just once)
-python3 -m pip install pipenv
+apt update
+sudo apt install python3-pip
+sudo python3 -m pip install pipenv
 
 # create directory to hold backend source code
 mkdir backend
