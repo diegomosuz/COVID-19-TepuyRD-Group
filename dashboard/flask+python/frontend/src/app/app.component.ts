@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SelectItem } from 'primeng/api';
 import { DatePipe } from '@angular/common';
-
+import { environment } from '../environments/environment';
+	
 export class SIR01Data {
   modData: any;
   modDataInf: any;
@@ -185,7 +186,7 @@ export class AppComponent {
   blockedPnlSIR01: boolean = false;
   blockedPnlSIR02: boolean = false;
   blockedPnlSEIR: boolean = false;
-  
+  baseApiUrl = environment.baseApiUrl;
 
   constructor(private httpClient: HttpClient, private datePipe: DatePipe) {
     this.sir01Data = new SIR01Data;
@@ -201,7 +202,7 @@ export class AppComponent {
   sir001() {
     let tf=this.sir01Data.tstart+this.sir01Data.simdays;
     this.blockedPnlSIR01 = true;
-    this.httpClient.get<any>(`http://127.0.0.1:5000/sir01?t0=${this.sir01Data.tstart}&tf=${tf}&r0=${this.sir01Data.r0}&x0=${this.sir01Data.x0}&z0=${this.sir01Data.z0}&betamn=${this.sir01Data.betamn}&betamx=${this.sir01Data.betamx}&gamma=${this.sir01Data.gamma}&hh=${this.sir01Data.hh}`)
+    this.httpClient.get<any>(`${this.baseApiUrl}/sir01?t0=${this.sir01Data.tstart}&tf=${tf}&r0=${this.sir01Data.r0}&x0=${this.sir01Data.x0}&z0=${this.sir01Data.z0}&betamn=${this.sir01Data.betamn}&betamx=${this.sir01Data.betamx}&gamma=${this.sir01Data.gamma}&hh=${this.sir01Data.hh}`)
       .subscribe((data: JSON) => {
          this.sir01Data.modData = {
             labels: data['data']['data'][0],
@@ -233,13 +234,14 @@ export class AppComponent {
             ]
         }
         this.blockedPnlSIR01 = false;
-      });
+      },
+      error => this.blockedPnlSIR01 = false);
   }
 
   sir002() {
     this.blockedPnlSIR02 = true;
     this.sir02Data.fi = this.datePipe.transform(this.sir02Data.date, 'M/d/yy');
-    this.httpClient.get<any>(`http://127.0.0.1:5000/sir02?country=${this.sir02Data.paisElegido}&fi=${this.sir02Data.fi}&rp=${this.sir02Data.rp}&i0=${this.sir02Data.i0}&s0=${this.sir02Data.s0}&r0=${this.sir02Data.r0}`).subscribe((data: JSON) => {
+    this.httpClient.get<any>(`${this.baseApiUrl}/sir02?country=${this.sir02Data.paisElegido}&fi=${this.sir02Data.fi}&rp=${this.sir02Data.rp}&i0=${this.sir02Data.i0}&s0=${this.sir02Data.s0}&r0=${this.sir02Data.r0}`).subscribe((data: JSON) => {
          this.sir02Data.modData = {
             labels: data['data']['data'][0],
             datasets: [
@@ -287,13 +289,14 @@ export class AppComponent {
             ]
         }
         this.blockedPnlSIR02 = false;
-      });
+      },
+      error => this.blockedPnlSIR02 = false);
   }
 
   seir001() {
     let tf=this.seir01Data.tstart+this.seir01Data.simdays;
     this.blockedPnlSEIR = true;
-    this.httpClient.get<any>(`http://127.0.0.1:5000/seir01?t0=${this.seir01Data.tstart}&tf=${tf}&r0=${this.seir01Data.r0}&x0=${this.seir01Data.x0}&w0=${this.seir01Data.w0}&z0=${this.seir01Data.z0}&betamn=${this.seir01Data.betamn}&betamx=${this.seir01Data.betamx}&gamma=${this.seir01Data.gamma}&alfa=${this.seir01Data.alfa}&hh=${this.seir01Data.hh}`)
+    this.httpClient.get<any>(`${this.baseApiUrl}/seir01?t0=${this.seir01Data.tstart}&tf=${tf}&r0=${this.seir01Data.r0}&x0=${this.seir01Data.x0}&w0=${this.seir01Data.w0}&z0=${this.seir01Data.z0}&betamn=${this.seir01Data.betamn}&betamx=${this.seir01Data.betamx}&gamma=${this.seir01Data.gamma}&alfa=${this.seir01Data.alfa}&hh=${this.seir01Data.hh}`)
       .subscribe((data: JSON) => {
          this.seir01Data.modData = {
             labels: data['data']['data'][0],
@@ -332,6 +335,7 @@ export class AppComponent {
         }
         
         this.blockedPnlSEIR = false;
-      });
+      },
+      error => this.blockedPnlSEIR = false);
   }
 }
