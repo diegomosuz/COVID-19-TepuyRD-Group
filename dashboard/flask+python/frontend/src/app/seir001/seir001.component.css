@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+hr.dashed {
+  border-top: 3px dashed #bbb;
+}

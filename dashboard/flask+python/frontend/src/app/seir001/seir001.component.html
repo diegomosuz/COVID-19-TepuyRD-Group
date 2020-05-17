@@ -1,0 +1,91 @@
+<div>
+  <h1>
+    Modelos analítico SEIR basado en Susceptibles, Expuestos, Infectados y Recuperados
+  </h1>
+</div>
+<div align="center">
+  <table class="" border="1" width = "70%">
+    <thead>
+      <tr>
+        <th align="center">#</th>
+        <th align="center">Elemento</th>
+        <th align="center">Descripción / Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="center">1</td>
+        <td align="center">Nombre del Archivo</td>
+        <td align="center">
+          <a href="https://github.com/diegomosuz/COVID-19-TepuyRD-Group/blob/master/G-03/scripts/Modelo_SEIR_Analitico_COVID19_0001.py">Modelo_SEIR_Analitico_COVID19_0001.py</a>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">2</td>
+        <td align="center">Tipo de Modelo</td>
+        <td align="center">Basado en Tipo SEIR (Susceptibles, Expuestos, Infectados, Recuperados)</td>
+      </tr>
+      <tr>
+        <td align="center">3</td>
+        <td align="center">Variables Involucradas</td>
+        <td align="center"><strong>Condiciones iniciales</strong><br> Fracción Inicial Susceptibles (<strong>w0</strong>)
+          <br> Fracción Inicial Expuestos (<strong>x0</strong>)<br> Fracción Inicial Infecciones (<strong>y0</strong>)
+          <br> Fracción Inicial Recuperados (<strong>z0</strong>)<br><br><strong>Datos de la simulación</strong>
+          <br> Tiempo inicial (<strong>t0</strong>)<br> Tiempo final (<strong>tf</strong>)<br><br><strong>Parámetros del modelo</strong>
+          <br> Tasa de exposición (<strong>alfa</strong>)<br> Tasa de transmisión (<strong>beta</strong>)<br> Tasa de recuperación (<strong>gamma</strong>)
+          <br> Límite máximo del parámetro beta (<strong>betamx</strong>)<br> Límite mínimo del parámetro beta (<strong>betamn</strong>)
+        </td>
+      </tr>
+      <tr>
+        <td align="center">4</td>
+        <td align="center">Salidas del programa</td>
+        <td align="center">Cuatro (4) curvas con la evolución del cambio en el tiempo de los grupos de individuos Infección, Expuestos, Susceptibles, Removidos.</td>
+      </tr>
+      <tr>
+        <td align="center">5</td>
+        <td align="center">Calidad del modelo</td>
+        <td align="center">Por definir</td>
+      </tr>
+      <tr>
+        <td align="center">6</td>
+        <td align="center">Referencias</td>
+        <td align="center">Casto P., Gonzalez S., Merino P., Ponce J., De los Reyes J.C., “modelización y simulación de la propagación del virus sars-cov-2 en ecuador”, Centro de Modelización Matemática en Áreas Clave para el Desarrollo, MODEMAT, Escuela Politécnica Nacional de Ecuador, 26 de marzo de 2020.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="dashed">
+<div>
+  <p><strong>Parametros de simulación:</strong>
+  t0 (días): <p-spinner  size="10" [(ngModel)]="seir01Data.tstart" [min]="0"></p-spinner>
+  tf (días): <p-spinner  size="10" [(ngModel)]="seir01Data.simdays" [min]="0" [max]="730"></p-spinner>
+  </p>
+  <p><strong>Condiciones Iniciales:</strong>
+  y0 (%): <p-spinner  size="10" [(ngModel)]="seir01Data.r0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  w0 (%): <p-spinner  size="10" [(ngModel)]="seir01Data.w0" [min]="-1" [max]="1" [step]="0.0000005"></p-spinner>
+  x0 (%): <p-spinner  size="10" [(ngModel)]="seir01Data.x0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  z0 (%): <p-spinner  size="10" [(ngModel)]="seir01Data.z0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  </p>
+  <p><strong>Datos del modelo:</strong>
+  beta max: <p-spinner  size="10" [(ngModel)]="seir01Data.betamx" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  beta min: <p-spinner  size="10" [(ngModel)]="seir01Data.betamn" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  gamma: <p-spinner  size="10" [(ngModel)]="seir01Data.gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  alfa: <p-spinner  size="10" [(ngModel)]="seir01Data.alfa" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  </p>
+  <br/>
+  <br/>
+  <div>
+    <p-button (click)="updateModel()"  [disabled]="blockedPnlSEIR" label="Actualizar SEIR"></p-button>
+    <p-progressSpinner *ngIf="blockedPnlSEIR" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="blockedPnlSEIR; then thenBlockSEIR else elseBlockSEIR"></div>
+  <ng-template #thenBlockSEIR><div><p-progressSpinner></p-progressSpinner><br/><br/><p>Cargando...</p></div></ng-template>
+  <ng-template #elseBlockSEIR>
+    <p-chart type="line" [data]="seir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="seir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
+  </ng-template>
+</div>

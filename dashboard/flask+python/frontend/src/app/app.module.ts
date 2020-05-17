@@ -17,11 +17,18 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CalendarModule } from 'primeng/calendar';
-
+import { Sir001Component } from './sir001/sir001.component';
+import { ModsComponent } from './mods/mods.component';
+import { Sir002Component } from './sir002/sir002.component';
+import { Seir001Component } from './seir001/seir001.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    Sir001Component,
+    ModsComponent,
+    Sir002Component,
+    Seir001Component,
   ],
   imports: [
     CommonModule,
@@ -38,7 +45,7 @@ import { CalendarModule } from 'primeng/calendar';
     ButtonModule,
     DropdownModule,
     ProgressSpinnerModule,
-    CalendarModule
+    CalendarModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

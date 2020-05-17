@@ -1,0 +1,96 @@
+<div>
+  <h1>
+    Modelos analítico SIR basado en Susceptibles, Infectados, Recuperados
+  </h1>
+</div>
+
+<div align="center">
+  <table class="" border="1" width = "70%">
+    <thead>
+      <tr>
+        <th align="center">#</th>
+        <th align="center">Elemento</th>
+        <th class="has-text-align-center"  align="center">Descripción / Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="center">1</td>
+        <td align="center">Nombre del Archivo</td>
+        <td class="has-text-align-center" align="center">
+          <a href="https://github.com/diegomosuz/COVID-19-TepuyRD-Group/blob/master/G-03/scripts/Modelo_SIR_Analitico_COVID19_0002.py">Modelo_SIR_Analitico_COVID19_0002.py</a>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">2</td>
+        <td align="center">Tipo de Modelo</td>
+        <td class="has-text-align-center" align="center">Basado en Tipo SIR (Susceptibles, Infectados, Recuperados)</td>
+      </tr>
+      <tr>
+        <td align="center">3</td>
+        <td align="center">Variables Involucradas</td>
+        <td class="has-text-align-center" align="center"><strong>Datos de la simulación</strong>
+          <br> Pais o region a simular (<strong>pais</strong>)<br> Fecha de inicio (<strong>fecha inicial</strong>)
+          <br> Rango predicho (<strong>días a simular</strong>) [dias]<br><br><strong>Condiciones iniciales</strong>
+          <br> Fracción Susceptible Inicial (<strong>s_0</strong>)<br> Fracción Infección Inicial (<strong>i_0</strong>)
+          <br> Fracción Recuperados Inicial (<strong>r_0</strong>)<br> <br><strong>Otros</strong>
+          <br> Descargar registros online (<strong><a href="https://github.com/diegomosuz/COVID-19-TepuyRD-Group/blob/master/G-03/scripts/data/data_url.json">download</a></strong>)
+          <br><br><strong>Ejemplo de entrada</strong><br>     countries=[“Ecuador”]<br>     download=True<br>     startdate=”1/22/20″<br>     predict_range=150<br>     s_0=4000000
+          <br>     i_0 = 2<br>     r_0 = 10
+        </td>
+      </tr>
+      <tr>
+        <td align="center">4</td>
+        <td align="center">Salidas del programa</td>
+        <td class="has-text-align-center" align="center">Archivo en formato .png conteniendo seis (6) Curvas con la evolución en el tiempo de los grupos de individuos: 1) Dato real de infectados, 2) Dato real de recuperados, 3) Dato real de fallecidos, 4) Curva estimada de susceptibles, 5) Curva estimada de infectados y 6) Curva estimada de removidos.
+          <br><br><strong>Entrada ejemplo:</strong> Viernes 10/Abr/2020<br> Country: Ecuador<br> Proyección de población a infectarse: 200.000
+          <br><br><strong>Salidas:</strong><br> beta=0.00000051, gamma=0.00269512, r_0:0.00019074
+        </td>
+      </tr>
+      <tr>
+        <td align="center">5</td>
+        <td align="center">Calidad del modelo</td>
+        <td class="has-text-align-center" align="center">Por definir</td>
+      </tr>
+      <tr>
+        <td align="center">6</td>
+        <td align="center">Referencias</td>
+        <td class="has-text-align-center" align="center">
+          <a href="https://colab.research.google.com/drive/1aDgRmUWS21rtbo2Y7IMO0tC8--jtsgF-#scrollTo=0q8dJ5aJI13m">https://colab.research.google.com/drive/1aDgRmUWS21rtbo2Y7IMO0tC8–jtsgF-#scrollTo=0q8dJ5aJI13m</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="dashed">
+<div style="overflow:visible">
+  <p>
+    <strong>Parametros de simulación:</strong>
+    País: <p-dropdown [options]="sir02Data.paises" [(ngModel)]="sir02Data.paisElegido" scrollHeight="400px"></p-dropdown>
+    Fecha inicial: <p-calendar [(ngModel)]="sir02Data.date" dateFormat="mm/dd/yy"  [minDate]="sir02Data.minDate"></p-calendar>
+    Días a simular: <p-spinner  size="10" [(ngModel)]="sir02Data.rp" [min]="0" [max]="730"></p-spinner>
+  </p>
+  <p>
+    <strong>Condiciones Iniciales:</strong>
+    s_0 (%): <p-spinner  size="10" [(ngModel)]="sir02Data.s0" [min]="0" [step]="1"></p-spinner>
+    i_0 (%): <p-spinner  size="10" [(ngModel)]="sir02Data.i0" [min]="0" [step]="1"></p-spinner>
+    r_0 (%): <p-spinner  size="10" [(ngModel)]="sir02Data.r0" [min]="0" [step]="1"></p-spinner>
+  </p>
+
+  <br/>
+  <br/>
+  <div>
+    <p-button (click)="updateModel()"  [disabled]="blockedPnlSIR02" label="Actualizar SIR-02"></p-button>
+    <p-progressSpinner *ngIf="blockedPnlSIR02" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="blockedPnlSIR02; then thenBlockSIR02 else elseBlockSIR02"></div>
+  <ng-template #thenBlockSIR02><div><p-progressSpinner></p-progressSpinner><br/><br/><p>Cargando...</p></div></ng-template>
+  <ng-template #elseBlockSIR02>
+    <p-chart type="line" [data]="sir02Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="sir02Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
+  </ng-template>
+</div>

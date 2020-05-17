@@ -1,0 +1,93 @@
+<div>
+  <h1>
+    Modelos analítico SIR basado en Susceptibles, Infectados y Recuperados
+  </h1>
+</div>
+
+<div align="center">
+  <table class="" border="1" width="70%">
+    <thead>
+      <tr>
+        <th class="has-text-align-center" align="center">#</th>
+        <th class="has-text-align-center" align="center">Elemento</th>
+        <th class="has-text-align-center" align="center">Descripción / Detalle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="has-text-align-center" align="center">1</td>
+        <td class="has-text-align-center" align="center">Nombre del Archivo</td>
+        <td class="has-text-align-center" align="center">
+          <a href="https://github.com/diegomosuz/COVID-19-TepuyRD-Group/blob/master/G-03/scripts/Modelo_SIR_Analitico_COVID19_0001.py">Modelo_SIR_Analitico_COVID19_0001.py</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="has-text-align-center" align="center">2</td>
+        <td class="has-text-align-center" align="center">Tipo de Modelo</td>
+        <td class="has-text-align-center" align="center">Basado en Tipo SIR (Susceptibles, Infectados, Recuperados)</td>
+      </tr>
+      <tr>
+        <td class="has-text-align-center" align="center">3</td>
+        <td class="has-text-align-center" align="center">Variables Involucradas</td>
+        <td class="has-text-align-center" align="center">
+          <strong>Condiciones iniciales</strong>
+          <br>Fracción Infección Inicial (<strong>y0=r0</strong>)
+          <br> Fracción Susceptible Inicial (<strong>x0</strong>)
+          <br> Fracción Recuperados Inicial (<strong>z0</strong>)<br>
+          <br><strong>Datos de la simulación</strong><br> Tiempo inicial (<strong>t0</strong>)
+          <br> Tiempo final (<strong>tf</strong>)<br><br><strong>Parámetros del modelo<br></strong> Tasa de transmisión (<strong>beta</strong>)
+          <br> Tasa de recuperación (<strong>gamma</strong>)
+          <br> Límite máximo del parámetro beta (<strong>betamx</strong>)
+          <br> Límite mínimo del parámetro beta (<strong>betamn</strong>)
+        </td>
+      </tr>
+      <tr>
+        <td class="has-text-align-center" align="center">4</td>
+        <td class="has-text-align-center" align="center">Salidas del programa</td>
+        <td class="has-text-align-center" align="center">Tres (3) curvas con la evolución del cambio en el tiempo de los grupos de individuos Infección, Susceptible, Removidos.<br><br>
+        </td>
+        </tr>
+        <tr>
+            <td class="has-text-align-center" align="center">5</td><td class="has-text-align-center" align="center">Calidad del modelo</td>
+            <td class="has-text-align-center" align="center">Por definir</td>
+        </tr>
+        <tr><td class="has-text-align-center" align="center">6</td>
+            <td class="has-text-align-center" align="center">Referencias</td>
+            <td class="has-text-align-center" align="center">Casto P., Gonzalez S., Merino P., Ponce J., De los Reyes J.C., “Modelización y simulación de la propagación del virus sars-cov-2 en ecuador”, Centro de Modelización Matemática en Áreas Clave para el Desarrollo, MODEMAT, Escuela Politécnica Nacional de Ecuador, 26 de marzo de 2020.</td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="dashed">
+<div>
+<p><strong>Parametros de simulación:</strong>
+  t0 (días): <p-spinner  size="10" [(ngModel)]="sir01Data.tstart" [min]="0"></p-spinner>
+  tf (días): <p-spinner  size="10" [(ngModel)]="sir01Data.simdays" [min]="0" [max]="730"></p-spinner>
+</p>
+<p><strong>Condiciones Iniciales:</strong>
+  y0 (%): <p-spinner  size="10" [(ngModel)]="sir01Data.r0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+  x0 (%): <p-spinner  size="10" [(ngModel)]="sir01Data.x0" [min]="-1" [max]="1" [step]="0.0000005"></p-spinner>
+  z0(%): <p-spinner  size="10" [(ngModel)]="sir01Data.z0" [min]="0" [max]="1" [step]="0.0000005"></p-spinner>
+</p>
+<p><strong>Datos del modelo:</strong>
+  beta max: <p-spinner  size="10" [(ngModel)]="sir01Data.betamx" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  beta min: <p-spinner  size="10" [(ngModel)]="sir01Data.betamn" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+  gamma: <p-spinner  size="10" [(ngModel)]="sir01Data.gamma" [min]="0.001" [max]="100" [step]="0.1"></p-spinner>
+</p>
+  <br/>
+  <br/>
+  <div>
+    <p-button (click)="updateModel()"  [disabled]="blockedPnlSIR01" label="Actualizar SIR-01"></p-button>
+    <p-progressSpinner *ngIf="blockedPnlSIR01" [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+  </div>
+</div>
+
+<div class="container">
+  <div *ngIf="blockedPnlSIR01; then thenBlockSIR01 else elseBlockSIR01"></div>
+  <ng-template #thenBlockSIR01><div><p-progressSpinner></p-progressSpinner><br/><br/><p>Cargando...</p></div></ng-template>
+  <ng-template #elseBlockSIR01>
+    <p-chart type="line" [data]="sir01Data.modData" responsive="true" width="40vw" height="80vh"></p-chart>
+    <p-chart type="line" [data]="sir01Data.modDataInf" responsive="true" width="40vw" height="80vh"></p-chart>
+  </ng-template>
+</div>
