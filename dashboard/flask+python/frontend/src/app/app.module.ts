@@ -21,6 +21,7 @@ import { Sir001Component } from './sir001/sir001.component';
 import { ModsComponent } from './mods/mods.component';
 import { Sir002Component } from './sir002/sir002.component';
 import { Seir001Component } from './seir001/seir001.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { Seir001Component } from './seir001/seir001.component';
     DropdownModule,
     ProgressSpinnerModule,
     CalendarModule,
+    BrowserAnimationsModule,
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]
