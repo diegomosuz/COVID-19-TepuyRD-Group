@@ -10,7 +10,7 @@ def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    @app.route('/sir01', methods=['GET', 'POST'])
+    @app.route('/api/sir01', methods=['GET', 'POST'])
     def sir01():
         try:
             r0 = request.args.get('r0', default = 0.0000045, type = float)
@@ -34,7 +34,7 @@ def create_app():
         except (RuntimeError, TypeError, NameError, Exception):
             return '{ "data": {"columns":[],"index":["fecha","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters"],"data":[[],[],[],[],[],[],[]]} }';
 
-    @app.route('/sir02')
+    @app.route('/api/sir02')
     def sir02():
         try:
             country = request.args.get('country', default = "Colombia", type = str)
@@ -55,7 +55,7 @@ def create_app():
         except (RuntimeError, TypeError, NameError, Exception):
             return '{ "data": {"columns":[],"index":["fecha","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters","Invalid parameters"],"data":[[],[],[],[],[],[],[]]} }';
 
-    @app.route('/seir01')
+    @app.route('/api/seir01')
     def seir01():
         try:
             r0 = request.args.get('r0', default = 0, type = float)

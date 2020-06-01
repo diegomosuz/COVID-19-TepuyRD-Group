@@ -1,0 +1,14 @@
+[Unit]
+Description=uWSGI instance to serve covid19 api
+After=network.target
+
+[Service]
+User=root
+Group=nginx
+
+WorkinDirectory=/usr/share/nginx/html/backend
+
+ExecStart=/sbin/uwsgi --ini /usr/share/nginx/html/backend/backend.ini
+
+[Install]
+WantedBy = multi-user.target
