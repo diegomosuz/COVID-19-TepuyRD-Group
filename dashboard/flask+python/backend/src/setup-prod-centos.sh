@@ -7,3 +7,4 @@ cp covidapi.service /etc/systemd/system
 systemctl daemon-reload
 systemctl enable covidapi.service
 systemctl start covidapi.service
+setenforce 0
